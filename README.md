@@ -45,16 +45,13 @@ import java.util.List;
 
 Siga os passos abaixo para configurar e executar o projeto:
 
-1. Clone o repositório usando o GitHub Desktop:
+1. Clone o Codigo usando o GitHub Desktop:
     - Abra o GitHub Desktop.
-    - Vá em `File` > `Clone repository`.
-    - Insira o URL do repositório: `https://github.com/Kevthiago/EcommerceLP`.
-    - Escolha o local onde deseja clonar o repositório e clique em `Clone`.
-
+    - Vá em `TRABALHO-FINAL-LP-E-POO` > `Cod`.
+    - Copie o Codigo.
 2. Abra o projeto no IntelliJ IDEA:
     - Abra o IntelliJ IDEA.
-    - Vá em `File` > `Open...`.
-    - Navegue até o diretório onde você clonou o repositório e selecione a pasta do projeto.
+    - Vá em `File` > `New` > `JavaClass` > Colar código.
     - Clique em `OK` para abrir o projeto.
 
 3. Instale as dependências:
