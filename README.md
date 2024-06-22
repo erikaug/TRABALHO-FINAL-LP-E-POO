@@ -9,8 +9,8 @@ Os arquivos .java estão na pasta "Cod", e as classes referentes à matéria de 
 2. [Tecnologias Utilizadas](#tecnologias-utilizadas)
 3. [Pré-requisitos](#pré-requisitos)
 4. [Como Utilizar](#como-utilizar)
-5. [Imagens, Vídeos ou GIFs](#imagens-vídeos-ou-gifs)
-6. [Desenvolvedores](#desenvolvedores)
+4. [Imagens, Vídeos ou GIFs](#imagens)
+5. [Desenvolvedores](#desenvolvedores)
 
 ---
 
@@ -56,10 +56,10 @@ Siga os passos abaixo para configurar e executar o projeto:
 
 3. Acesse a aplicação:
     - A aplicação desktop deve abrir automaticamente. Siga as instruções na tela para começar a usar a aplicação.
-
+## Imagens
 4. Fotos do Trabalho:
     - As fotos do trabalho se encontram na pasta `Fotos`
-
+## Desenvolvedores
 5. Desenvolvedores:
 
 - **Erik Augusto Andrade e Silva**
@@ -67,14 +67,3 @@ Siga os passos abaixo para configurar e executar o projeto:
 
 - **Vinicius Alexandre Souza de Oliveira**
     - GitHub: `https://github.com/viniciusalexandre2`
-
-## Futuras Melhorias
-
-- [ ] Adicionar novas funcionalidades, como `botões para remover item do carrinho` sem precisar do código e `cálculo para taxa de entrega`.
-- [ ] Melhorar a performance da aplicação em `usabilidade`, `segurança`, `design`, `conexão com banco de dados` e `cadastro/login de usuário`.
-- [ ] Corrigir bugs relacionados à `conexão com banco de dados` e aos `dados do cliente no cadastro`.
-- [ ] Implementar testes automatizados para `detectar bugs` e `pontos a melhorar`.
-
-## Licença
-
-Este projeto está licenciado sob a MIT License. Consulte o arquivo `LICENSE` para mais informações.
