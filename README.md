@@ -1,5 +1,4 @@
 # TRABALHO-FINAL-LP-E-POO
-Descrição do que é a aplicação
 A aplicação "Loja de Roupas Times de Futebol" é uma aplicação desktop desenvolvida em Java utilizando Swing para a interface gráfica. Ela simula uma loja de roupas que vende camisas de times de futebol. Os principais recursos da aplicação incluem:
 
 1 - Tela de Login e Cadastro: Permite que os usuários façam login ou se registrem na aplicação.
