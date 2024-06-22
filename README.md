@@ -1,9 +1,7 @@
-# <p align="center">JAVA EATS</p>
-
-# <p align="center"><img src="src/img/logo.png" alt="Logo"></p>
+# <p align="center">LOJA DE ROUPAS TIME FUTEBOL</p>
 
 ### Trabalho final de LP e POO. 
-Os arquivos .java estão na pasta "src", e as classes referentes à matéria de POO estão na pasta `src/POO `.
+Os arquivos .java estão na pasta "Cod", e as classes referentes à matéria de POO estão na pasta `src/POO `.
 
 ## Sumário
 
@@ -13,8 +11,6 @@ Os arquivos .java estão na pasta "src", e as classes referentes à matéria de 
 4. [Como Utilizar](#como-utilizar)
 5. [Imagens, Vídeos ou GIFs](#imagens-vídeos-ou-gifs)
 6. [Desenvolvedores](#desenvolvedores)
-7. [Futuras Melhorias](#futuras-melhorias)
-8. [Licença](#licença)
 
 ---
 
