@@ -60,6 +60,7 @@ Siga os passos abaixo para configurar e executar o projeto:
     - As fotos do trabalho se encontram na pasta `Fotos`
       
 TELA DE CADASTRO
+
 ![image](https://github.com/erikaug/TRABALHO-FINAL-LP-E-POO/assets/71230803/9d996e28-7741-43e1-932c-e1e7f3d392df)
 
 ## Desenvolvedores
