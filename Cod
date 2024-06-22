@@ -1,0 +1,563 @@
+package com.mycompany.lojaderoupas;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.util.ArrayList;
+import java.util.List;
+
+public class LojaDeRoupas {
+    private static Carrinho carrinho;
+    private static TelaPrincipal telaPrincipal;
+    private static List<Usuario> usuarios = new ArrayList<>();
+
+    public static void main(String[] args) {
+        carrinho = new Carrinho();
+        SwingUtilities.invokeLater(() -> {
+            TelaLogin telaLogin = new TelaLogin();
+            telaLogin.setVisible(true);
+        });
+    }
+
+    // Tela Principal (Vitrine de Produtos)
+    static class TelaPrincipal extends JFrame {
+        private JPanel panel;
+        private JButton btnAddCarrinho;
+        private JButton btnCarrinho;
+        private JList<String> listProdutos;
+        private DefaultListModel<String> listModel;
+        private List<Produto> produtos;
+
+        public TelaPrincipal() {
+            setTitle("Loja de Roupas Times de Futebol");
+            setSize(600, 600);
+            setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            setLocationRelativeTo(null);
+
+            
+            panel = new JPanel(new BorderLayout(10, 10));
+            panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+            panel.setBackground(new Color(173, 216, 230)); // Cor de fundo azul claro
+
+            // Título
+            JLabel titulo = new JLabel("Loja de Roupas Times de Futebol", JLabel.CENTER);
+            titulo.setFont(new Font("Arial", Font.BOLD, 24));
+            titulo.setForeground(new Color(0, 123, 255));
+            panel.add(titulo, BorderLayout.NORTH);
+
+            // Lista de produtos
+            listModel = new DefaultListModel<>();
+            listProdutos = new JList<>(listModel);
+            listProdutos.setFont(new Font("Arial", Font.PLAIN, 16));
+            listProdutos.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+            JScrollPane scrollPane = new JScrollPane(listProdutos);
+
+            produtos = new ArrayList<>();
+            produtos.add(new Produto("Camisa Masculina adidas Atlético Mineiro 2024", 340.00, "Branca"));
+            produtos.add(new Produto("Camisa Masculina adidas Atlético Mineiro 2024", 350.00, "Preta e Branca"));
+            produtos.add(new Produto("Camisa Masculina adidas Cruzeiro 2024", 320.00, "Azul"));
+            produtos.add(new Produto("Camisa Masculina adidas Cruzeiro 2024", 310.00, "Branca"));
+            produtos.add(new Produto("Camisa Masculina adidas Flamengo 2024", 300.00, "Vermelho e Preta"));
+            produtos.add(new Produto("Camisa Masculina Volt Amarica 2024", 200.00, "Verde e Preto"));
+            produtos.add(new Produto("Camisa Masculina adidas Internacional 2024", 349.00, "Vermelho e Branca"));
+            for (Produto p : produtos) {
+                listModel.addElement(p.getNome() + " - R$" + p.getPreco() + " - Cor: " + p.getCor());
+            }
+
+            panel.add(scrollPane, BorderLayout.CENTER);
+
+            // Painel inferior com botões
+            btnAddCarrinho = new JButton("Adicionar ao Carrinho");
+            btnAddCarrinho.setFont(new Font("Arial", Font.BOLD, 16));
+            btnAddCarrinho.setBackground(new Color(40, 167, 69));
+            btnAddCarrinho.setForeground(Color.WHITE);
+
+            btnCarrinho = new JButton("Carrinho");
+            btnCarrinho.setFont(new Font("Arial", Font.BOLD, 16));
+            btnCarrinho.setBackground(new Color(255, 193, 7));
+            btnCarrinho.setForeground(Color.WHITE);
+
+            JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
+            bottomPanel.setBackground(new Color(173, 216, 230)); // Cor de fundo azul claro
+            bottomPanel.add(btnAddCarrinho);
+            bottomPanel.add(btnCarrinho);
+
+            panel.add(bottomPanel, BorderLayout.SOUTH);
+
+            add(panel);
+
+            btnAddCarrinho.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    int selectedIndex = listProdutos.getSelectedIndex();
+                    if (selectedIndex != -1) {
+                        Produto produtoSelecionado = produtos.get(selectedIndex);
+                        carrinho.adicionarItem(new ItemVenda(produtoSelecionado, 1));
+                        JOptionPane.showMessageDialog(null, "Produto adicionado ao carrinho!");
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Selecione um produto!");
+                    }
+                }
+            });
+
+            btnCarrinho.addActionListener(e -> new TelaCarrinho().setVisible(true));
+        }
+    }
+
+    // Tela de Carrinho de Compras
+    static class TelaCarrinho extends JFrame {
+        private JPanel panel;
+        private JList<String> listCarrinho;
+        private DefaultListModel<String> listModel;
+        private JButton btnRemover;
+        private JButton btnPagamento;
+
+        public TelaCarrinho() {
+            setTitle("Carrinho de Compras");
+            setSize(400, 300);
+            setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            setLocationRelativeTo(null);
+
+            panel = new JPanel(new BorderLayout());
+            panel.setBackground(new Color(173, 216, 230)); // Cor de fundo azul claro
+
+            listModel = new DefaultListModel<>();
+            listCarrinho = new JList<>(listModel);
+            listCarrinho.setFont(new Font("Arial", Font.PLAIN, 16));
+            JScrollPane scrollPane = new JScrollPane(listCarrinho);
+
+            atualizarListaCarrinho();
+
+            btnRemover = new JButton("Remover");
+            btnRemover.setFont(new Font("Arial", Font.BOLD, 16));
+            btnRemover.setBackground(new Color(220, 53, 69));
+            btnRemover.setForeground(Color.WHITE);
+
+            btnPagamento = new JButton("Finalizar Pagamento");
+            btnPagamento.setFont(new Font("Arial", Font.BOLD, 16));
+            btnPagamento.setBackground(new Color(0, 123, 255));
+            btnPagamento.setForeground(Color.WHITE);
+
+            JPanel bottomPanel = new JPanel();
+            bottomPanel.setBackground(new Color(173, 216, 230)); // Cor de fundo azul claro
+            bottomPanel.add(btnRemover);
+            bottomPanel.add(btnPagamento);
+
+            panel.add(scrollPane, BorderLayout.CENTER);
+            panel.add(bottomPanel, BorderLayout.SOUTH);
+
+            add(panel);
+
+            btnRemover.addActionListener(e -> {
+                int selectedIndex = listCarrinho.getSelectedIndex();
+                if (selectedIndex != -1) {
+                    carrinho.removerItem(selectedIndex);
+                    atualizarListaCarrinho();
+                } else {
+                    JOptionPane.showMessageDialog(null, "Selecione um item para remover!");
+                }
+            });
+
+            btnPagamento.addActionListener(e -> {
+                if (carrinho.getItens().isEmpty()) {
+                    JOptionPane.showMessageDialog(null, "Adicione itens ao carrinho antes de finalizar o pagamento!");
+                } else {
+                    new TelaPagamento().setVisible(true);
+                }
+            });
+        }
+
+        private void atualizarListaCarrinho() {
+            listModel.clear();
+            for (ItemVenda item : carrinho.getItens()) {
+                listModel.addElement(item.getProduto().getNome() + " - R$" + item.getProduto().getPreco() + " x" + item.getQuantidade());
+            }
+        }
+    }
+
+    // Tela de Pagamento
+    static class TelaPagamento extends JFrame {
+        private JPanel panel;
+        private JLabel lblTotal;
+        private JLabel lblFormaPagamento;
+        private JTextField txtTotal;
+        private JComboBox<String> cmbFormaPagamento;
+        private JButton btnConfirmar;
+
+        public TelaPagamento() {
+            setTitle("Pagamento");
+            setSize(300, 200);
+            setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            setLocationRelativeTo(null);
+
+            panel = new JPanel(new GridLayout(3, 2));
+            panel.setBackground(new Color(173, 216, 230)); // Cor de fundo azul claro
+
+            lblTotal = new JLabel("Total:");
+            lblTotal.setFont(new Font("Arial", Font.BOLD, 16));
+
+            lblFormaPagamento = new JLabel("Forma de Pagamento:");
+            lblFormaPagamento.setFont(new Font("Arial", Font.BOLD, 16));
+
+            txtTotal = new JTextField();
+            txtTotal.setEditable(false);
+            txtTotal.setFont(new Font("Arial", Font.PLAIN, 16));
+            txtTotal.setText("R$" + String.format("%.2f", carrinho.calcularTotal()));
+
+            String[] formasPagamento = {"Cartão de Crédito", "Cartão de Débito", "Boleto"};
+            cmbFormaPagamento = new JComboBox<>(formasPagamento);
+            cmbFormaPagamento.setFont(new Font("Arial", Font.PLAIN, 16));
+
+            btnConfirmar = new JButton("Confirmar");
+            btnConfirmar.setFont(new Font("Arial", Font.BOLD, 16));
+            btnConfirmar.setBackground(new Color(40, 167, 69));
+            btnConfirmar.setForeground(Color.WHITE);
+
+            panel.add(lblTotal);
+            panel.add(txtTotal);
+            panel.add(lblFormaPagamento);
+            panel.add(cmbFormaPagamento);
+            panel.add(new JLabel());
+            panel.add(btnConfirmar);
+
+            add(panel);
+
+            btnConfirmar.addActionListener(e -> {
+                String formaPagamento = (String) cmbFormaPagamento.getSelectedItem();
+                if (formaPagamento.equals("Cartão de Crédito") || formaPagamento.equals("Cartão de Débito")) {
+                    new TelaPagamentoCartao(formaPagamento).setVisible(true);
+                } else {
+                    JOptionPane.showMessageDialog(null, "Pagamento realizado com sucesso!\nForma de Pagamento: " + formaPagamento);
+                    carrinho.limparCarrinho();
+                    dispose();
+                }
+            });
+        }
+    }
+
+    // Tela de Pagamento com Cartão
+    static class TelaPagamentoCartao extends JFrame {
+        private JPanel panel;
+        private JLabel lblNumeroCartao;
+        private JLabel lblValidade;
+        private JLabel lblCVV;
+        private JTextField txtNumeroCartao;
+        private JTextField txtValidade;
+        private JTextField txtCVV;
+        private JButton btnConfirmar;
+        private String formaPagamento;
+
+        public TelaPagamentoCartao(String formaPagamento) {
+            this.formaPagamento = formaPagamento;
+
+            setTitle("Pagamento com Cartão");
+            setSize(300, 200);
+            setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            setLocationRelativeTo(null);
+
+            panel = new JPanel(new GridLayout(4, 2));
+            panel.setBackground(new Color(173, 216, 230)); // Cor de fundo azul claro
+
+            lblNumeroCartao = new JLabel("Número do Cartão:");
+            lblNumeroCartao.setFont(new Font("Arial", Font.BOLD, 16));
+
+            lblValidade = new JLabel("Validade (MM/AA):");
+            lblValidade.setFont(new Font("Arial", Font.BOLD, 16));
+
+            lblCVV = new JLabel("CVV:");
+            lblCVV.setFont(new Font("Arial", Font.BOLD, 16));
+
+            txtNumeroCartao = new JTextField();
+            txtNumeroCartao.setFont(new Font("Arial", Font.PLAIN, 16));
+            txtNumeroCartao.addKeyListener(new KeyAdapter() {
+                @Override
+                public void keyTyped(KeyEvent e) {
+                    char c = e.getKeyChar();
+                    if (!Character.isDigit(c)) {
+                        e.consume();  // Ignorar se não for um número
+                    }
+                }
+            });
+
+            txtValidade = new JTextField();
+            txtValidade.setFont(new Font("Arial", Font.PLAIN, 16));
+            txtValidade.addKeyListener(new KeyAdapter() {
+                @Override
+                public void keyTyped(KeyEvent e) {
+                    char c = e.getKeyChar();
+                    if (!Character.isDigit(c) && c != '/') {
+                        e.consume();  // Ignorar se não for um número ou '/'
+                    }
+                }
+            });
+
+            txtCVV = new JTextField();
+            txtCVV.setFont(new Font("Arial", Font.PLAIN, 16));
+            txtCVV.addKeyListener(new KeyAdapter() {
+                @Override
+                public void keyTyped(KeyEvent e) {
+                    char c = e.getKeyChar();
+                    if (!Character.isDigit(c)) {
+                        e.consume();  // Ignorar se não for um número
+                    }
+                }
+            });
+
+            btnConfirmar = new JButton("Confirmar");
+            btnConfirmar.setFont(new Font("Arial", Font.BOLD, 16));
+            btnConfirmar.setBackground(new Color(40, 167, 69));
+            btnConfirmar.setForeground(Color.WHITE);
+
+            panel.add(lblNumeroCartao);
+            panel.add(txtNumeroCartao);
+            panel.add(lblValidade);
+            panel.add(txtValidade);
+            panel.add(lblCVV);
+            panel.add(txtCVV);
+            panel.add(new JLabel());
+            panel.add(btnConfirmar);
+
+            add(panel);
+
+            btnConfirmar.addActionListener(e -> {
+                // Validação dos dados do cartão (simples)
+                String numeroCartao = txtNumeroCartao.getText();
+                String validade = txtValidade.getText();
+                String cvv = txtCVV.getText();
+
+                if (numeroCartao.isEmpty() || validade.isEmpty() || cvv.isEmpty()) {
+                    JOptionPane.showMessageDialog(null, "Todos os campos são obrigatórios!");
+                } else {
+                    // Processar o pagamento (simulação)
+                    JOptionPane.showMessageDialog(null, "Pagamento com " + formaPagamento + " realizado com sucesso!");
+                    carrinho.limparCarrinho();
+                    dispose();
+                }
+            });
+        }
+    }
+
+    // Tela de Login
+    static class TelaLogin extends JFrame {
+        private JPanel panel;
+        private JLabel lblUsuario;
+        private JLabel lblSenha;
+        private JTextField txtUsuario;
+        private JPasswordField txtSenha;
+        private JButton btnEntrar;
+        private JButton btnCadastrar;
+
+        public TelaLogin() {
+            setTitle("Login");
+            setSize(300, 150);
+            setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            setLocationRelativeTo(null);
+
+            panel = new JPanel(new GridLayout(4, 2));
+            panel.setBackground(new Color(173, 216, 230)); // Cor de fundo azul claro
+
+            lblUsuario = new JLabel("Usuário:");
+            lblSenha = new JLabel("Senha:");
+            txtUsuario = new JTextField();
+            txtSenha = new JPasswordField();
+            btnEntrar = new JButton("Entrar");
+            btnCadastrar = new JButton("Cadastrar");
+
+            // cor de fundo e a cor da fonte do botão Entrar
+            btnEntrar.setBackground(new Color(40, 167, 69));
+            btnEntrar.setForeground(Color.WHITE);
+
+            panel.add(lblUsuario);
+            panel.add(txtUsuario);
+            panel.add(lblSenha);
+            panel.add(txtSenha);
+            panel.add(btnEntrar);
+            panel.add(btnCadastrar);
+
+            add(panel);
+
+            btnEntrar.addActionListener(e -> {
+                String usuario = txtUsuario.getText();
+                String senha = new String(txtSenha.getPassword());
+
+                boolean loginValido = usuarios.stream()
+                        .anyMatch(u -> u.getUsuario().equals(usuario) && u.getSenha().equals(senha));
+
+                if (loginValido) {
+                    JOptionPane.showMessageDialog(null, "Login realizado com sucesso!");
+                    dispose(); // Fecha a janela de login
+                    SwingUtilities.invokeLater(() -> {
+                        telaPrincipal = new TelaPrincipal();
+                        telaPrincipal.setVisible(true);
+                    });
+                } else {
+                    JOptionPane.showMessageDialog(null, "Usuário ou senha incorretos. Tente novamente.");
+                }
+            });
+
+            btnCadastrar.addActionListener(e -> new TelaCadastro().setVisible(true));
+        }
+    }
+
+    // Tela de Cadastro
+    static class TelaCadastro extends JFrame {
+        private JPanel panel;
+        private JLabel lblNome;
+        private JLabel lblUsuario;
+        private JLabel lblSenha;
+        private JTextField txtNome;
+        private JTextField txtUsuario;
+        private JPasswordField txtSenha;
+        private JButton btnCadastrar;
+
+        public TelaCadastro() {
+            setTitle("Cadastro de Usuário");
+            setSize(300, 200);
+            setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            setLocationRelativeTo(null);
+
+            panel = new JPanel(new GridLayout(4, 2));
+            panel.setBackground(new Color(173, 216, 230)); // Cor de fundo azul claro
+
+            lblNome = new JLabel("Nome:");
+            lblUsuario = new JLabel("Usuário:");
+            lblSenha = new JLabel("Senha:");
+            txtNome = new JTextField();
+            txtUsuario = new JTextField();
+            txtSenha = new JPasswordField();
+            btnCadastrar = new JButton("Cadastrar");
+
+            panel.add(lblNome);
+            panel.add(txtNome);
+            panel.add(lblUsuario);
+            panel.add(txtUsuario);
+            panel.add(lblSenha);
+            panel.add(txtSenha);
+            panel.add(new JLabel());
+            panel.add(btnCadastrar);
+
+            add(panel);
+
+            btnCadastrar.addActionListener(e -> {
+                String nome = txtNome.getText();
+                String usuario = txtUsuario.getText();
+                String senha = new String(txtSenha.getPassword());
+
+                if (nome.isEmpty() || usuario.isEmpty() || senha.isEmpty()) {
+                    JOptionPane.showMessageDialog(null, "Todos os campos são obrigatórios.");
+                } else {
+                    usuarios.add(new Usuario(nome, usuario, senha));
+                    JOptionPane.showMessageDialog(null, "Usuário cadastrado com sucesso!");
+                    dispose();
+                }
+            });
+        }
+    }
+
+    // Carrinho de Compras
+    static class Carrinho {
+        private List<ItemVenda> itens;
+
+        public Carrinho() {
+            itens = new ArrayList<>();
+        }
+
+        public void adicionarItem(ItemVenda item) {
+            itens.add(item);
+        }
+
+        public void removerItem(int index) {
+            if (index >= 0 && index < itens.size()) {
+                itens.remove(index);
+            }
+        }
+
+        public List<ItemVenda> getItens() {
+            return itens;
+        }
+
+        public double calcularTotal() {
+            double total = 0;
+            for (ItemVenda item : itens) {
+                total += item.getProduto().getPreco() * item.getQuantidade();
+            }
+            return total;
+        }
+
+        public void limparCarrinho() {
+            itens.clear();
+        }
+    }
+
+    // Item de Venda
+    static class ItemVenda {
+        private Produto produto;
+        private int quantidade;
+
+        public ItemVenda(Produto produto, int quantidade) {
+            this.produto = produto;
+            this.quantidade = quantidade;
+        }
+
+        public Produto getProduto() {
+            return produto;
+        }
+
+        public int getQuantidade() {
+            return quantidade;
+        }
+    }
+
+    // Produto
+    static class Produto {
+        private String nome;
+        private double preco;
+        private String cor;
+
+        public Produto(String nome, double preco, String cor) {
+            this.nome = nome;
+            this.preco = preco;
+            this.cor = cor;
+        }
+
+        public String getNome() {
+            return nome;
+        }
+
+        public double getPreco() {
+            return preco;
+        }
+
+        public String getCor() {
+            return cor;
+        }
+    }
+
+    // Usuário
+    static class Usuario {
+        private String nome;
+        private String usuario;
+        private String senha;
+
+        public Usuario(String nome, String usuario, String senha) {
+            this.nome = nome;
+            this.usuario = usuario;
+            this.senha = senha;
+        }
+
+        public String getNome() {
+            return nome;
+        }
+
+        public String getUsuario() {
+            return usuario;
+        }
+
+        public String getSenha() {
+            return senha;
+        }
+    }
+}
