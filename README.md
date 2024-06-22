@@ -25,7 +25,6 @@ Obs: para acessar uma versão do projeto que funcione no terminal, utilize a pas
 - IDEA - `IntelliJ`
 - Java JDK - `versão do JDK`
 - Interface gráfica - `Swing`
-- Banco de dados - `SQLite`
 
 ## Pré-requisitos
 
