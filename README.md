@@ -63,6 +63,24 @@ TELA DE CADASTRO
 
 ![image](https://github.com/erikaug/TRABALHO-FINAL-LP-E-POO/assets/71230803/9d996e28-7741-43e1-932c-e1e7f3d392df)
 
+TELA DE LOGIN
+
+![image](https://github.com/erikaug/TRABALHO-FINAL-LP-E-POO/assets/71230803/76f02b20-82f1-4648-a7b6-93c7149813f6)
+
+TELA DA LOJA DE CAMISAS
+
+![image](https://github.com/erikaug/TRABALHO-FINAL-LP-E-POO/assets/71230803/5948e4ef-f13c-425e-a27d-f71595daf006)
+
+TELA DO CARRINHO COM AS CAMISAS
+
+![image](https://github.com/erikaug/TRABALHO-FINAL-LP-E-POO/assets/71230803/bf90df99-dfb7-4e12-af2b-5276c5a7d882)
+
+TELA DE PAGAMENTO 
+
+![image](https://github.com/erikaug/TRABALHO-FINAL-LP-E-POO/assets/71230803/4de9ec84-a7d0-4605-890c-bd70ce9b713c)
+![image](https://github.com/erikaug/TRABALHO-FINAL-LP-E-POO/assets/71230803/43e1f10d-4e26-4a3e-80b7-f5d366053929)
+
+
 ## Desenvolvedores
 5. Desenvolvedores:
 
