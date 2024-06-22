@@ -54,63 +54,19 @@ Siga os passos abaixo para configurar e executar o projeto:
     - Vá em `File` > `New` > `JavaClass` > Colar código.
     - Clique em `OK` para abrir o projeto.
 
-3. Instale as dependências:
-    - No IntelliJ IDEA, adicione a biblioteca `sqlite-jdbc-3.42.0.0.jar` à estrutura do projeto.
-    - Instale o banco de dados `SQLite` para configurar a conexão.
-    - Confira e configure a `URL`, `USER` e `SENHA` na classe `ConexaoBD` conforme necessário.
-    - Sentença utilizada para criar a tabela:
-
-     ![Script SQL](src/img/img.png)
-
-      - Diagrama de Classes representando a tabela no Banco de Dados:
-      
-      ![Diagrama de Classes](src/img/img_1.png)
-
-4. Execute a aplicação:
-    - No IntelliJ IDEA, localize o arquivo principal da aplicação `TelaLogin.java`.
-    - Clique com o botão direito na classe principal e selecione `Run 'TelaLogin.main()'`.
-    - Aguarde até que a aplicação inicie completamente.
-    - Obs: cada tela pode ser executada separadamente, mas recomenda-se iniciar pela `TelaLogin` para uma melhor experiência.
-
-5. Acesse a aplicação:
+3. Acesse a aplicação:
     - A aplicação desktop deve abrir automaticamente. Siga as instruções na tela para começar a usar a aplicação.
 
-## Imagens, Vídeos ou GIFs
-> Observação: os GIFs estão acelerados. Ao final da sessão, há um vídeo demonstrando o projeto completo de forma mais detalhada.
-### Tela de Login/Cadastro
-#### Tela de Cadastro
-<div align="center"> <img src="https://github.com/Kevthiago/EcommerceLP/assets/145061688/a5a836ca-7ff4-4e1c-99ff-35837d27259a" width="700px" />
- </div> 
+4. Fotos do Trabalho:
+    - As fotos do trabalho se encontram na pasta `Fotos`
 
-#### Tela de Login
-<div align="center"> <img src="https://github.com/Kevthiago/EcommerceLP/assets/145061688/68c720ff-e9d0-4465-9683-f8a24b92ce64" width="700px" />
- </div> 
+5. Desenvolvedores:
 
-### Tela de Vitrine de Produtos
-<div align="center"> <img src="https://github.com/Kevthiago/EcommerceLP/assets/145061688/af735cc4-77a6-45d6-8d44-ba4cca0e7b29" width="700px" />
- </div> 
+- **Erik Augusto Andrade e Silva**
+    - GitHub: `https://github.com/erikaug`
 
-### Tela de Carrinho
-<div align="center"> <img src="https://github.com/Kevthiago/EcommerceLP/assets/145061688/d68c842d-7a53-4197-9847-6c8589ef91f4" width="700px" />
- </div> 
-
-### Tela de Pagamentos
-<div align="center"> <img src="https://github.com/Kevthiago/EcommerceLP/assets/145061688/15245547-fac9-4013-be9c-fead11d49462" width="700px" />
- </div> 
-
-### Demonstração em Vídeo: 
-
- https://github.com/Kevthiago/EcommerceLP/assets/145061688/3f1efe3f-8219-4954-8ddd-2d0618851f1d 
-
-## Desenvolvedores
-
-- **Kevin Thiago dos Santos**
-    - GitHub: `https://github.com/Kevthiago`
-    - LinkedIn: `https://www.linkedin.com/in/kevin-thiago-15577520b/`
-
-- **Ana Cristina Gonçalvez Siqueira**
-    - GitHub: `https://github.com/anacristinags`
-    - LinkedIn: `https://www.linkedin.com/in/ana-cristina-g-97122b242/`
+- **Vinicius Alexandre Souza de Oliveira**
+    - GitHub: `https://github.com/viniciusalexandre2`
 
 ## Futuras Melhorias
 
