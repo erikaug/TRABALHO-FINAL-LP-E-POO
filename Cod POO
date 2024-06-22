@@ -1,0 +1,352 @@
+package com.mycompany.lojaderoupas;
+
+import javax.swing.*;
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+import java.util.ResourceBundle;
+
+public class LojaDeRoupas {
+    private static Carrinho carrinho;
+    private static TelaPrincipal telaPrincipal;
+    private static List<Usuario> usuarios = new ArrayList<>();
+
+    public static void main(String[] args) {
+        carrinho = new Carrinho();
+        SwingUtilities.invokeLater(() -> {
+            Locale.setDefault(new Locale("pt", "BR")); // Define o locale padrão para português do Brasil
+            telaPrincipal = new TelaPrincipal(getProdutos());
+            telaPrincipal.setVisible(true);
+        });
+    }
+
+    // Método para obter a lista de produtos
+    private static List<ProdutoBase> getProdutos() {
+        List<ProdutoBase> produtos = new ArrayList<>();
+        produtos.add(new CamisaMasculina("Camisa Masculina adidas Atlético Mineiro 2024", 340.00, "Branca"));
+        produtos.add(new CamisaMasculina("Camisa Masculina adidas Atlético Mineiro 2024", 350.00, "Preta e Branca"));
+        produtos.add(new CamisaMasculina("Camisa Masculina adidas Cruzeiro 2024", 320.00, "Azul"));
+        produtos.add(new CamisaMasculina("Camisa Masculina adidas Cruzeiro 2024", 310.00, "Branca"));
+        produtos.add(new CamisaMasculina("Camisa Masculina adidas Flamengo 2024", 300.00, "Vermelho e Preta"));
+        produtos.add(new CamisaMasculina("Camisa Masculina Volt Amarica 2024", 200.00, "Verde e Preto"));
+        produtos.add(new CamisaMasculina("Camisa Masculina adidas Internacional 2024", 349.00, "Vermelho e Branca"));
+        return produtos;
+    }
+
+    // Tela Principal (Vitrine de Produtos)
+    static class TelaPrincipal extends JFrame {
+        private JPanel panel;
+        private JButton btnAddCarrinho;
+        private JButton btnCarrinho;
+        private JList<String> listProdutos;
+        private DefaultListModel<String> listModel;
+        private List<ProdutoBase> produtos;
+        private ResourceBundle resourceBundle;
+
+        public TelaPrincipal(List<ProdutoBase> produtos) {
+            this.produtos = produtos;
+            this.resourceBundle = ResourceBundle.getBundle("messages", Locale.getDefault());
+
+            setTitle(resourceBundle.getString("title"));
+            setSize(600, 600);
+            setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            setLocationRelativeTo(null);
+
+            panel = new JPanel(new BorderLayout(10, 10));
+            panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+            panel.setBackground(new Color(173, 216, 230)); // Cor de fundo azul claro
+
+            // Título
+            JLabel titulo = new JLabel(resourceBundle.getString("title"), JLabel.CENTER);
+            titulo.setFont(new Font("Arial", Font.BOLD, 24));
+            titulo.setForeground(new Color(0, 123, 255));
+            panel.add(titulo, BorderLayout.NORTH);
+
+            // Lista de produtos
+            listModel = new DefaultListModel<>();
+            listProdutos = new JList<>(listModel);
+            listProdutos.setFont(new Font("Arial", Font.PLAIN, 16));
+            listProdutos.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+            JScrollPane scrollPane = new JScrollPane(listProdutos);
+
+            for (ProdutoBase p : produtos) {
+                listModel.addElement(p.getDescricao());
+            }
+
+            panel.add(scrollPane, BorderLayout.CENTER);
+
+            // Painel inferior com botões
+            btnAddCarrinho = new JButton(resourceBundle.getString("button.addCarrinho"));
+            btnAddCarrinho.setFont(new Font("Arial", Font.BOLD, 16));
+            btnAddCarrinho.setBackground(new Color(40, 167, 69));
+            btnAddCarrinho.setForeground(Color.WHITE);
+
+            btnCarrinho = new JButton(resourceBundle.getString("button.carrinho"));
+            btnCarrinho.setFont(new Font("Arial", Font.BOLD, 16));
+            btnCarrinho.setBackground(new Color(255, 193, 7));
+            btnCarrinho.setForeground(Color.WHITE);
+
+            JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
+            bottomPanel.setBackground(new Color(173, 216, 230)); // Cor de fundo azul claro
+            bottomPanel.add(btnAddCarrinho);
+            bottomPanel.add(btnCarrinho);
+
+            panel.add(bottomPanel, BorderLayout.SOUTH);
+
+            add(panel);
+
+            btnAddCarrinho.addActionListener(e -> {
+                int selectedIndex = listProdutos.getSelectedIndex();
+                try {
+                    if (selectedIndex != -1) {
+                        ProdutoBase produtoSelecionado = produtos.get(selectedIndex);
+                        carrinho.adicionarItem(new ItemVenda(produtoSelecionado, 1));
+                        JOptionPane.showMessageDialog(null, resourceBundle.getString("message.produtoAdicionado"));
+                    } else {
+                        JOptionPane.showMessageDialog(null, resourceBundle.getString("message.selecioneProduto"));
+                    }
+                } catch (IndexOutOfBoundsException ex) {
+                    JOptionPane.showMessageDialog(null, "Erro ao adicionar produto: " + ex.getMessage());
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(null, "Ocorreu um erro inesperado: " + ex.getMessage());
+                }
+            });
+
+            btnCarrinho.addActionListener(e -> new TelaCarrinho().setVisible(true));
+        }
+    }
+
+    // Tela de Carrinho de Compras
+    static class TelaCarrinho extends JFrame {
+        private JPanel panel;
+        private JList<String> listCarrinho;
+        private DefaultListModel<String> listModel;
+        private JButton btnRemover;
+        private JButton btnPagamento;
+        private ResourceBundle resourceBundle;
+
+        public TelaCarrinho() {
+            this.resourceBundle = ResourceBundle.getBundle("messages", Locale.getDefault());
+
+            setTitle(resourceBundle.getString("title.carrinho"));
+            setSize(400, 300);
+            setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            setLocationRelativeTo(null);
+
+            panel = new JPanel(new BorderLayout());
+            panel.setBackground(new Color(173, 216, 230)); // Cor de fundo azul claro
+
+            listModel = new DefaultListModel<>();
+            listCarrinho = new JList<>(listModel);
+            listCarrinho.setFont(new Font("Arial", Font.PLAIN, 16));
+            JScrollPane scrollPane = new JScrollPane(listCarrinho);
+
+            atualizarListaCarrinho();
+
+            btnRemover = new JButton(resourceBundle.getString("button.remover"));
+            btnRemover.setFont(new Font("Arial", Font.BOLD, 16));
+            btnRemover.setBackground(new Color(220, 53, 69));
+            btnRemover.setForeground(Color.WHITE);
+
+            btnPagamento = new JButton(resourceBundle.getString("button.finalizarPagamento"));
+            btnPagamento.setFont(new Font("Arial", Font.BOLD, 16));
+            btnPagamento.setBackground(new Color(0, 123, 255));
+            btnPagamento.setForeground(Color.WHITE);
+
+            JPanel bottomPanel = new JPanel();
+            bottomPanel.setBackground(new Color(173, 216, 230)); // Cor de fundo azul claro
+            bottomPanel.add(btnRemover);
+            bottomPanel.add(btnPagamento);
+
+            panel.add(scrollPane, BorderLayout.CENTER);
+            panel.add(bottomPanel, BorderLayout.SOUTH);
+
+            add(panel);
+
+            btnRemover.addActionListener(e -> {
+                int selectedIndex = listCarrinho.getSelectedIndex();
+                if (selectedIndex != -1) {
+                    carrinho.removerItem(selectedIndex);
+                    atualizarListaCarrinho();
+                } else {
+                    JOptionPane.showMessageDialog(null, resourceBundle.getString("message.selecioneItemRemover"));
+                }
+            });
+
+            btnPagamento.addActionListener(e -> {
+                if (carrinho.getItens().isEmpty()) {
+                    JOptionPane.showMessageDialog(null, resourceBundle.getString("message.carrinhoVazio"));
+                } else {
+                    new TelaPagamento().setVisible(true);
+                }
+            });
+        }
+
+        private void atualizarListaCarrinho() {
+            listModel.clear();
+            for (ItemVenda item : carrinho.getItens()) {
+                listModel.addElement(item.getProduto().getDescricao() + " x" + item.getQuantidade());
+            }
+        }
+    }
+
+    // Tela de Pagamento
+    static class TelaPagamento extends JFrame {
+        private JPanel panel;
+        private JLabel lblTotal;
+        private JTextField txtTotal;
+        private JButton btnConfirmar;
+        private ResourceBundle resourceBundle;
+
+        public TelaPagamento() {
+            this.resourceBundle = ResourceBundle.getBundle("messages", Locale.getDefault());
+
+            setTitle(resourceBundle.getString("title.pagamento"));
+            setSize(300, 200);
+            setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            setLocationRelativeTo(null);
+
+            panel = new JPanel(new GridLayout(3, 2));
+            panel.setBackground(new Color(173, 216, 230)); // Cor de fundo azul claro
+
+            lblTotal = new JLabel(resourceBundle.getString("label.total"));
+            lblTotal.setFont(new Font("Arial", Font.BOLD, 16));
+
+            txtTotal = new JTextField();
+            txtTotal.setEditable(false);
+            txtTotal.setFont(new Font("Arial", Font.PLAIN, 16));
+            txtTotal.setText("R$" + String.format("%.2f", carrinho.calcularTotal()));
+
+            btnConfirmar = new JButton(resourceBundle.getString("button.confirmar"));
+            btnConfirmar.setFont(new Font("Arial", Font.BOLD, 16));
+            btnConfirmar.setBackground(new Color(40, 167, 69));
+            btnConfirmar.setForeground(Color.WHITE);
+
+            panel.add(lblTotal);
+            panel.add(txtTotal);
+            panel.add(btnConfirmar);
+
+            add(panel);
+
+            btnConfirmar.addActionListener(e -> {
+                JOptionPane.showMessageDialog(null, resourceBundle.getString("message.pagamentoConfirmado"));
+                carrinho.limparCarrinho();
+                dispose();
+            });
+        }
+    }
+
+    // Classe abstrata ProdutoBase
+    abstract static class ProdutoBase {
+        private String nome;
+        private double preco;
+
+        public ProdutoBase(String nome, double preco) {
+            this.nome = nome;
+            this.preco = preco;
+        }
+
+        public String getNome() {
+            return nome;
+        }
+
+        public void setNome(String nome) {
+            this.nome = nome;
+        }
+
+        public double getPreco() {
+            return preco;
+        }
+
+        public void setPreco(double preco) {
+            this.preco = preco;
+        }
+
+        // Método abstrato para obter a descrição do produto específico
+        public abstract String getDescricao();
+    }
+
+    // Classe CamisaMasculina que estende ProdutoBase
+    static class CamisaMasculina extends ProdutoBase {
+        private String cor;
+
+        public CamisaMasculina(String nome, double preco, String cor) {
+            super(nome, preco);
+            this.cor = cor;
+        }
+
+        public String getCor() {
+            return cor;
+        }
+
+        public void setCor(String cor) {
+            this.cor = cor;
+        }
+
+        @Override
+        public String getDescricao() {
+            return getNome() + " - Cor: " + cor + " - Preço: R$" + String.format("%.2f", getPreco());
+        }
+    }
+
+    // Classe Carrinho
+    static class Carrinho {
+        private List<ItemVenda> itens;
+
+        public Carrinho() {
+            this.itens = new ArrayList<>();
+        }
+
+        public void adicionarItem(ItemVenda item) {
+            itens.add(item);
+        }
+
+        public void removerItem(int index) {
+            itens.remove(index);
+        }
+
+        public List<ItemVenda> getItens() {
+            return itens;
+        }
+
+        public double calcularTotal() {
+            double total = 0;
+            for (ItemVenda item : itens) {
+                total += item.getProduto().getPreco() * item.getQuantidade();
+            }
+            return total;
+        }
+
+        public void limparCarrinho() {
+            itens.clear();
+        }
+    }
+
+    // Classe ItemVenda
+    static class ItemVenda {
+        private ProdutoBase produto;
+        private int quantidade;
+
+        public ItemVenda(ProdutoBase produto, int quantidade) {
+            this.produto = produto;
+            this.quantidade = quantidade;
+        }
+
+        public ProdutoBase getProduto() {
+            return produto;
+        }
+
+        public void setProduto(ProdutoBase produto) {
+            this.produto = produto;
+        }
+
+        public int getQuantidade() {
+            return quantidade;
+        }
+
+        public void setQuantidade(int quantidade) {
+            this.quantidade = quantidade;
+        }
+    }
+}
