@@ -13,3 +13,143 @@ A aplicação "Loja de Roupas Times de Futebol" é uma aplicação desktop desen
 5 - Tela de Pagamento com Cartão: Detalha a entrada de informações do cartão de crédito ou débito.
 
 ![image](https://github.com/erikaug/TRABALHO-FINAL-LP-E-POO/assets/71230803/b8437750-934f-4b12-8b3f-8f14ecef1e1c)
+
++-------------------+
+|   LojaDeRoupas    |
++-------------------+
+| - carrinho        |
+| - telaPrincipal   |
+| - usuarios        |
++-------------------+
+| + main(String[])  |
++-------------------+
+         |
+         | contains
+         |
+         v
++-------------------+            +-------------------+
+|  TelaPrincipal    |<-----------|     Carrinho      |
++-------------------+            +-------------------+
+| - panel           |            | - itens           |
+| - btnAddCarrinho  |            +-------------------+
+| - btnCarrinho     |            | + adicionarItem() |
+| - listProdutos    |            | + removerItem()   |
+| - produtos        |            | + getItens()      |
++-------------------+            | + calcularTotal() |
+| + TelaPrincipal() |            | + limparCarrinho()|
++-------------------+            +-------------------+
+         |
+         | contains
+         |
+         v
++-------------------+            +-------------------+
+|   TelaCarrinho    |<-----------|    ItemVenda      |
++-------------------+            +-------------------+
+| - panel           |            | - produto         |
+| - listCarrinho    |            | - quantidade      |
+| - btnRemover      |            +-------------------+
+| - btnPagamento    |            | + getProduto()    |
++-------------------+            | + getQuantidade() |
+| + TelaCarrinho()  |            +-------------------+
+| + atualizarLista()|
++-------------------+
+         |
+         | contains
+         |
+         v
++-------------------+
+|   TelaPagamento   |
++-------------------+
+| - panel           |
+| - lblTotal        |
+| - lblFormaPag.    |
+| - txtTotal        |
+| - cmbFormaPag.    |
+| - btnConfirmar    |
++-------------------+
+| + TelaPagamento() |
++-------------------+
+         |
+         | contains
+         |
+         v
++-------------------+
+| TelaPag.Cartao    |
++-------------------+
+| - panel           |
+| - lblNumCartao    |
+| - lblValidade     |
+| - lblCVV          |
+| - txtNumCartao    |
+| - txtValidade     |
+| - txtCVV          |
+| - btnConfirmar    |
+| - formaPag.       |
++-------------------+
+| + TelaPag.Cartao()|
++-------------------+
+         |
+         | contains
+         |
+         v
++-------------------+
+|    TelaLogin      |
++-------------------+
+| - panel           |
+| - lblUsuario      |
+| - lblSenha        |
+| - txtUsuario      |
+| - txtSenha        |
+| - btnEntrar       |
+| - btnCadastrar    |
++-------------------+
+| + TelaLogin()     |
++-------------------+
+         |
+         | contains
+         |
+         v
++-------------------+
+|   TelaCadastro    |
++-------------------+
+| - panel           |
+| - lblNome         |
+| - lblUsuario      |
+| - lblSenha        |
+| - txtNome         |
+| - txtUsuario      |
+| - txtSenha        |
+| - btnCadastrar    |
++-------------------+
+| + TelaCadastro()  |
++-------------------+
+         |
+         | contains
+         |
+         v
++-------------------+
+|     Produto       |
++-------------------+
+| - nome            |
+| - preco           |
+| - cor             |
++-------------------+
+| + getNome()       |
+| + getPreco()      |
+| + getCor()        |
++-------------------+
+         |
+         | contains
+         |
+         v
++-------------------+
+|     Usuario       |
++-------------------+
+| - nome            |
+| - usuario         |
+| - senha           |
++-------------------+
+| + getNome()       |
+| + getUsuario()    |
+| + getSenha()      |
++-------------------+
