@@ -16,9 +16,8 @@ Os arquivos .java estão na pasta "Cod", e as classes referentes à matéria de 
 
 ## Informações sobre o Projeto
 
-Este projeto é uma aplicação desktop desenvolvida para ser utilizada como um sistema de vendas de um restaurante. Ele foi criado para cadastrar clientes, permitir login, escolher produtos da vitrine e adicioná-los ao carrinho (ou removê-los), e realizar o pagamento do pedido.
+Este projeto é uma aplicação desktop desenvolvida para ser utilizada como um sistema de vendas de uma Loja de Camisas de Time. Ele foi criado para cadastrar clientes, permitir login, escolher produtos da vitrine e adicioná-los ao carrinho (ou removê-los), e realizar o pagamento do pedido.
 
-Obs: para acessar uma versão do projeto que funcione no terminal, utilize a pasta `src/POO` presente no repositório.
 
 ## Tecnologias Utilizadas
 
@@ -31,8 +30,16 @@ Obs: para acessar uma versão do projeto que funcione no terminal, utilize a pas
 Antes de começar, certifique-se de ter as seguintes ferramentas instaladas:
 
 - IDEA `IntelliJ`
-- Banco de Dados `SQLite`
-- Biblioteca `sqlite-jdbc-3.42.0.0.jar`
+- Biblioteca 
+`import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.util.ArrayList;
+import java.util.List;
+`
 
 ## Como Utilizar
 
