@@ -8,7 +8,6 @@ Os arquivos .java estão na pasta "Cod", e as classes referentes à matéria de 
 1. [Informações sobre o Projeto](#informações-sobre-o-projeto)
 2. [Tecnologias Utilizadas](#tecnologias-utilizadas)
 3. [Pré-requisitos](#pré-requisitos)
-4. [Como Utilizar](#como-utilizar)
 4. [Imagens, Vídeos ou GIFs](#imagens)
 5. [Desenvolvedores](#desenvolvedores)
 
